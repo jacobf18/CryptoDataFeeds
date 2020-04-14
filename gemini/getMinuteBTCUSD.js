@@ -1,12 +1,16 @@
 const WebSocket = require('ws');
 
 const ws = new WebSocket('wss://api.gemini.com/v2/marketdata');
+const subscription = "candles_1m";
+const symbol = "BTCUSD";
 
+/* When the connection opens, send a subscription message. */
 ws.on('open', function open() {
-  ws.send('{"type": "subscribe","subscriptions":[{"name":"candles_1m","symbols":["BTCUSD"]}]}');
+  ws.send('{"type":"subscribe","subscriptions":[{"name":"' + subscription + '","symbols":["' + symbol + '"]}]}');
 });
 
-let count = 0;
+let count = 0; /* Variable just for counting the heartbeats. */
+/* Parse a message as it is received */
 ws.on('message', function incoming(data) {
   /* If heartbeat, do nothing, but count */
   let dataJSON = JSON.parse(data);
