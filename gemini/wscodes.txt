@@ -1,0 +1,4 @@
+{"type": "subscribe","subscriptions":[{"name":"candles_1m","symbols":["BTCUSD"]}]}
+
+
+{"type": "subscribe", "subscriptions": [{"name": "candles_15m","symbols": ["BTCUSD"]}]}
