@@ -1,19 +1,16 @@
+// Coinbae Pro Websocket
 const WebSocket = require('ws');
+const ws = new WebSocket('wss://ws-feed.pro.coinbase.com');
+const symbol = "BTC-USD";
 
-const ws = new WebSocket('wss://api.gemini.com/v2/marketdata');
-const subscription = "candles_1m";
-const symbol = "BTCUSD";
+// Google cloud Pub/Sub
 const topicName = 'crypto-1m-data';
+const projectId = 'project-id'
+const keyFilename = '../creds.json'
 const {PubSub} = require('@google-cloud/pubsub');
-const pubSubClient = new PubSub();
+const pubSubClient = new PubSub({projectId, keyFilename});
 
 async function publishMessage(data) {
-  /**
-   * TODO(developer): Uncomment the following lines to run the sample.
-   */
-  // const topicName = 'my-topic';
-
-  // Publishes the message as a string, e.g. "Hello, world!" or JSON.stringify(someObject)
   const dataBuffer = Buffer.from(data);
 
   const messageId = await pubSubClient.topic(topicName).publish(dataBuffer);
@@ -22,7 +19,7 @@ async function publishMessage(data) {
 
 /* When the connection opens, send a subscription message. */
 ws.on('open', function open() {
-  ws.send('{"type":"subscribe","subscriptions":[{"name":"' + subscription + '","symbols":["' + symbol + '"]}]}');
+  ws.send('{"type": "subscribe","product_ids": ["' + symbol + '"],"channels": ["matches"]}');
 });
 
 let count = 0; /* Variable just for counting the heartbeats. */

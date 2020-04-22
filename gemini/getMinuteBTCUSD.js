@@ -1,19 +1,16 @@
+// Gemini Websocket
 const WebSocket = require('ws');
-
 const ws = new WebSocket('wss://api.gemini.com/v2/marketdata');
 const subscription = "candles_1m";
 const symbol = "BTCUSD";
+
+// Google Cloud Pub/Sub
+const keyFilename = '../creds.json'
 const topicName = 'crypto-1m-data';
 const {PubSub} = require('@google-cloud/pubsub');
 const pubSubClient = new PubSub();
 
 async function publishMessage(data) {
-  /**
-   * TODO(developer): Uncomment the following lines to run the sample.
-   */
-  // const topicName = 'my-topic';
-
-  // Publishes the message as a string, e.g. "Hello, world!" or JSON.stringify(someObject)
   const dataBuffer = Buffer.from(data);
 
   const messageId = await pubSubClient.topic(topicName).publish(dataBuffer);
