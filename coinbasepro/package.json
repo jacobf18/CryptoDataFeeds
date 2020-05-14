@@ -1,0 +1,14 @@
+{
+    "name": "docker-get-ticks-coinbase-pro",
+    "version": "1.0.0",
+    "description": "Node.js app to get ticks from Coinbase Pro using a websocket connection.",
+    "author": "Jacob Feitelberg j.e.feitelberg@gmail.com",
+    "main": "getTicks.js",
+    "scripts": {
+    "start": "node getTicks.js"
+    },
+    "dependencies": {
+        "@google-cloud/pubsub": "^1.7.2",
+        "ws": "^7.2.3"
+    }
+}

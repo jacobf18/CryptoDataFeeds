@@ -5,11 +5,12 @@ if (isMainThread) {
   // Google cloud Pub/Sub
   const topicName = 'tick-data-50';
   const projectId = 'crypto-intraday';
-  const keyFilename = '../creds.json';
+  const keyFilename = './creds.json';
   const {PubSub} = require('@google-cloud/pubsub');
   const pubSubClient = new PubSub({projectId, keyFilename});
 
   async function publishMessage(data) {
+    // console.log(data);
     const dataBuffer = Buffer.from(JSON.stringify(data));
     const messageId = await pubSubClient.topic(topicName).publish(dataBuffer);
     console.log(`Message ${messageId} published.`);
@@ -17,7 +18,7 @@ if (isMainThread) {
 
   const worker = new Worker(__filename);
   let queue = [];
-  let size = 5;
+  let size = 20;
 
   // This works synchronously so will not run again before the previous is done.
   worker.on('message', (message) => {
@@ -42,11 +43,11 @@ if (isMainThread) {
         prices.push(d['price']);
         volume += d['volume'];
       }
-      console.log(queue.length);
+      // console.log(queue.length);
       let high = Math.max(...prices);
       let low = Math.min(...prices);
       let data = {'time': startTime, 'open': open, 'high': high, 'low': low, 'close': close, 'volume': volume, 'symbol': symbol};
-      console.log(data);
+      // console.log(data);
       publishMessage(data);
     }
   });
@@ -69,7 +70,7 @@ else {
     let type = dataJSON['type'];
 
     if (type == 'heartbeat') {
-      console.log('Heartbeat');
+      // console.log('Heartbeat');
     }
     else if (type == 'match') {
       let price = Number(dataJSON['price']);
